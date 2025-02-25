@@ -22,6 +22,8 @@ initialize.problem <- function() {
 }
 
 # Analyzes if an action can be applied in the received state.
+
+
 is.applicable <- function (state, action, problem) {
   result <- FALSE # Default value is FALSE.
 
@@ -61,6 +63,7 @@ get.cost <- function (action, state, problem) {
 }
 
 # Heuristic function used by Informed Search Algorithms
+#FUNCIÓN HEURÍSTICA: suma de las distancias de cada una de las casillas (excluyendo la que se encuentra vacía)
 get.evaluation <- function(state, problem) {
   # <INSERT YOUR CODE HERE TO RETURN THE RESULT OF THE EVALUATION FUNCTION>
 
