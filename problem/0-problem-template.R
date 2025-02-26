@@ -10,13 +10,16 @@ initialize.problem <- function() {
   problem <- list() # Default value is an empty list.
 
   # This attributes are compulsory
-  # problem$name              <- <INSERT CODE HERE>
-  # problem$state_initial     <- <INSERT CODE HERE>
-  # problem$state_final       <- <INSERT CODE HERE>
-  # problem$actions_possible  <- <INSERT CODE HERE>
+  problem$name              <- #<INSERT CODE HERE>
+  problem$state_initial     <- #<INSERT CODE HERE>
+  problem$state_final       <- #<INSERT CODE HERE>
+  problem$actions_possible  <- #<INSERT CODE HERE>
 
   # You can add additional attributes
   # problem$<aditional_attribute>  <- <INSERT CODE HERE>
+  
+  movimientos <- c("Arriba", "Abajo", "Derecha", "Izquierda", "ArDerecha",
+                   "AbDerecha")
 
   return(problem)
 }
