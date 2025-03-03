@@ -63,3 +63,4 @@ solve.problem(problem)
 problem <- initialize.problem(rows = 3, columns = 3, perm = c(2,3,5,1,4,8,0,6,7))
 # Solve the problem
 solve.problem(problem)
+

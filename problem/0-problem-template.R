@@ -6,32 +6,48 @@
 
 # This function must return a list with the information needed to solve the problem.
 # (Depending on the problem, it should receive or not parameters)
-initialize.problem <- function() {
-  problem <- list() # Default value is an empty list.
-
-  # This attributes are compulsory
-  problem$name              <- #<INSERT CODE HERE>
-  problem$state_initial     <- #<INSERT CODE HERE>
-  problem$state_final       <- #<INSERT CODE HERE>
-  problem$actions_possible  <- #<INSERT CODE HERE>
-
-  # You can add additional attributes
-  # problem$<aditional_attribute>  <- <INSERT CODE HERE>
+initialize.problem <- function(numCanibales, numMisioneros, capacidadBarca) {
+  # Initialize the problem object as an empty list.
+  problem <- list()
   
-  movimientos <- c("Arriba", "Abajo", "Derecha", "Izquierda", "ArDerecha",
-                   "AbDerecha")
-
+  # This attributes are compulsory
+  problem$name <- paste0("MisionerosYCanibales")
+  
+  # Initial state of the problem (number of Canibales, Misioneros, and position of the boat)
+  problem$state_initial <- data.frame(Canibal = numCanibales, Misionero = numMisioneros, Barca = "Izquierda")
+  
+  # Final state (goal state where all are on the right side)
+  problem$state_final <- data.frame(Canibal = 0, Misionero = 0, Barca = "Derecha")
+  
+  # Initialize the possible actions
+  acciones <- c()
+  for (canibal in 0:capacidadBarca) {
+    for (misionero in 0:capacidadBarca) {
+      if (canibal + misionero > 0 && canibal + misionero <= capacidadBarca) {
+        acciones <- c(acciones, paste(c(rep("Canibal", canibal), rep("Misionero", misionero)), collapse = " "))
+      }
+    }
+  }
+  
+  # Assign actions to the problem object
+  problem$acciones <- acciones
+  
+  # Actions possible as a data frame (direction could be interpreted as action)
+  problem$actions_possible <- data.frame(direction = acciones, stringsAsFactors = FALSE)
+  
+  # Return the problem list with all attributes
   return(problem)
 }
+
 
 # Analyzes if an action can be applied in the received state.
 
 
 is.applicable <- function (state, action, problem) {
   result <- FALSE # Default value is FALSE.
-
-  # <INSERT CODE HERE TO CHECK THE APPLICABILITY OF EACH ACTION>
-
+  
+  
+  
   return(result)
 }
 
@@ -72,3 +88,4 @@ get.evaluation <- function(state, problem) {
 
 	return(1) # Default value is 1.
 }
+
