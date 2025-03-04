@@ -46,7 +46,25 @@ initialize.problem <- function(numCanibales, numMisioneros, capacidadBarca) {
 
 
 is.applicable <- function (state, action, problem) {
+  
   result <- FALSE # Default value is FALSE.
+  
+  #state[0] -> canibalesIzq
+  #state[1] -> misionerossIzq
+  #state[2] -> ladoBarca
+  #state[3] -> capacidadBarca
+  
+  if(state[0] == 0 && state[1] == 0){
+    result<-TRUE
+  }else{
+    #capacidadBarca - 1 (para saber si alguien se ha montado/subido en la barca)
+    #Verificar capacidadBarca
+    #Si se montan en la barca -> canibalesIzq y/o misionerosIzq --> - num de misioneros/canibales subidos
+    #capacidadBarca + 1 (para saber si alguien se ha bajado de la barca)
+    #Verificar que misioneros no sean superados en num por canibales, a excepción de que todos los canibales esten en un lado y los misioneros en otro
+    
+    #recorrer lista de acciones, y ...
+  }
   
   
   
