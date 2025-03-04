@@ -13,11 +13,9 @@ initialize.problem <- function(numCanibales, numMisioneros, capacidadBarca) {
   # This attributes are compulsory
   problem$name <- paste0("MisionerosYCanibales")
   
-  # Initial state of the problem (number of Canibales, Misioneros, and position of the boat)
-  problem$state_initial <- data.frame(Canibal = numCanibales, Misionero = numMisioneros, Barca = "Izquierda")
+  problem$state_initial <- c(numCanibales, numMisioneros, "Izquierda")
   
-  # Final state (goal state where all are on the right side)
-  problem$state_final <- data.frame(Canibal = 0, Misionero = 0, Barca = "Derecha")
+  problem$state_final <- c(0,0,"Derecha")
   
   # Initialize the possible actions
   acciones <- c()
@@ -29,11 +27,15 @@ initialize.problem <- function(numCanibales, numMisioneros, capacidadBarca) {
     }
   }
   
-  # Assign actions to the problem object
   problem$acciones <- acciones
+  problem$numCanibales <- numCanibales
+  problem$numMisioneros <- numMisioneros
+  problem$capacidadBarca <- capacidadBarca
+  
+  
   
   # Actions possible as a data frame (direction could be interpreted as action)
-  problem$actions_possible <- data.frame(direction = acciones, stringsAsFactors = FALSE)
+  problem$actions_possible <- c(acciones, stringsAsFactors = FALSE)
   
   # Return the problem list with all attributes
   return(problem)
