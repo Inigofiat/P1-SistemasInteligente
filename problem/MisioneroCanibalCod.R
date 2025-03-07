@@ -90,7 +90,7 @@ is.applicable <- function (state, action, problem) {
     return(TRUE)
   }else{
     #if(action[2]>state[4] | action[2]>state[5]){
-     # return(FALSE)
+    # return(FALSE)
     #}
     
     numCanibalIzqFin <- state[0] + action[1]
@@ -116,7 +116,7 @@ effect <- function (state, action, problem) {
   #state[1] -> misionerosIzq
   #state[2] -> ladoBarca
   #state[3] -> capacidadBarca
-
+  
   #misionerosMovimiento <- action[1]
   #canibalesMovimiento <- action[2]
   
@@ -153,7 +153,7 @@ to.string = function (state, problem) {
 # Returns the cost of applying an action over a state
 get.cost <- function (action, state, problem) {
   # <INSERT YOUR CODE HERE TO RETURN THE COST OF APPLYING THE ACTION ON THE STATE>
-
+  
   return(1) # Default value is 1.
 }
 
@@ -161,7 +161,7 @@ get.cost <- function (action, state, problem) {
 #FUNCIÓN HEURÍSTICA: suma de las distancias de cada una de las casillas (excluyendo la que se encuentra vacía)
 get.evaluation <- function(state, problem) {
   # <INSERT YOUR CODE HERE TO RETURN THE RESULT OF THE EVALUATION FUNCTION>
-
-	return(1) # Default value is 1.
+  
+  return(1) # Default value is 1.
 }
 
