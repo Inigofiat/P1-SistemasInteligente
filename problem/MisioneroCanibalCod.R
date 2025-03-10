@@ -46,53 +46,48 @@ is.applicable <- function (state, action, problem) {
   
   result <- FALSE # Default value is FALSE.
   
-  #state[0] -> canibalesIzq
-  #state[1] -> misionerossIzq
-  #state[2] -> ladoBarca
-  #state[3] -> capacidadBarca
-  
-  canibalesIzq <- as.numeric(state[0])
-  misionerosIzq <- as.numeric(state[1])
-  ladoBarca <- state[2]
-  capacidadBarca <- as.numeric(state[3])
-  print(canibalesIzq)
+  canibalesIzq <- as.numeric(state[1])
+  misionerosIzq <- as.numeric(state[2])
+  ladoBarca <- state[3]
+  capacidadBarca <- as.numeric(state[4])
   
   #misionerosMovimiento <- action[1]
   #canibalesMovimiento <- action[2]
   #direccion <- action[3]
-
+  
   canibalesDer <-  problem$numCanibales - canibalesIzq
   misionerosDer <-  problem$numMisioneros - misionerosIzq
   
-  if (!any(ladoBarca == c("Derecha", "Izquierda"))) {
-    return(FALSE)
-  }
-  if(action[1] + action[2] > capacidadBarca | action[1] + action[2] < 1){
+  if (is.na(action[1]) || is.na(action[2]) || is.na(action[3])) {
     return(FALSE)
   }
   
-  if(ladoBarca=="Izquierda"){
-    if(action[1]>misionerosIzq | action[2]>misionerosIzq){
+  if(ladoBarca=="Izquierda" && action[3] == -1){
+    if(action[1] > misionerosIzq || action[2] > canibalesIzq){
       return(FALSE)
     }
-    numCanibalIzqFin <- misionerosIzq - action[2]
+    numCanibalIzqFin <- canibalesIzq - action[2]
     numCanibalDchaFin <- canibalesDer + action[2]
     numMisioneroIzqFin <- misionerosIzq - action[1]
     numMisioneroDchaFin <- misionerosDer + action[1]
     
-    if((numCanibalIzqFin > 0 & numCanibalIzqFin > numMisioneroIzqFin) || (numCanibalDchaFin > 0 & numCanibalDchaFin > numMisioneroDchaFin)){
+    if ((numMisioneroIzqFin > 0 && numCanibalIzqFin > numMisioneroIzqFin) || 
+        (numMisioneroDchaFin > 0 && numCanibalDchaFin > numMisioneroDchaFin)) {
       return(FALSE)
     }
+    
     return(TRUE)
   }else{
+    if(action[1] > misionerosDer || action[2] > canibalesDer){
+      return(FALSE)
+    }
+    numCanibalIzqFin <- canibalesIzq + action[2]
+    numCanibalDchaFin <- canibalesDer - action[2]
+    numMisioneroIzqFin <- misionerosIzq + action[1]
+    numMisioneroDchaFin <- misionerosDer - action[1]
     
-    numCanibalIzqFin <- canibalesIzq + action[1]
-    numCanibalDchaFin <- canibalesIzq - action[1]
-    numMisioneroIzqFin <- misionerosIzq + action[2]
-    numMisioneroDchaFin <- misionerosIzq - action[2]
-    
-    if ((numMisioneroIzqFin > 0 & numCanibalIzqFin > numMisioneroIzqFin) || 
-        (numMisioneroDchaFin > 0 & numCanibalDchaFin > numMisioneroDchaFin)) {
+    if ((numMisioneroIzqFin > 0 && numCanibalIzqFin > numMisioneroIzqFin) || 
+        (numMisioneroDchaFin > 0 && numCanibalDchaFin > numMisioneroDchaFin)) {
       return(FALSE)
     }
     
@@ -105,43 +100,49 @@ is.applicable <- function (state, action, problem) {
 # Returns the state resulting on applying the action over the state
 effect <- function (state, action, problem) {
   result <- state # Default value is the current state.
-  #state[0] -> canibalesIzq
-  #state[1] -> misionerosIzq
-  #state[2] -> ladoBarca
-  #state[3] -> capacidadBarca
   
-  canibalesIzq <- as.numeric(state[0])
-  misionerosIzq <- as.numeric(state[1])
-  ladoBarca <- state[2]
-  capacidadBarca <- as.numeric(state[3])
+  canibalesIzq <- as.numeric(state[1])
+  misionerosIzq <- as.numeric(state[2])
+  ladoBarca <- state[3]
+  capacidadBarca <- problem$capacidadBarca    
   
   #misionerosMovimiento <- action[1]
   #canibalesMovimiento <- action[2]
   
-  if(ladoBarca == "Izquierda"){
-    result[0] <- canibalesIzq - action[2]
-    result[1] <- misionerosIzq - action[1]
-    result[2] <- "Derecha"
-    result[3] <- capacidadBarca - (action[1] + action[2])
+  if(ladoBarca == "Izquierda" && action[3] == -1){
+    canibalesIzq <- canibalesIzq - action[2]
+    misionerosIzq <- misionerosIzq - action[1]
+    ladoBarca <- "Derecha"
   }else{
-    result[0] <- canibalesIzq + action[2]
-    result[1] <- misionerosIzq + action[1]
-    result[2] <- "Izquierda"
-    result[3] <- capacidadBarca - (action[1] + action[2]) #???
+    canibalesIzq <- canibalesIzq + action[2]
+    misionerosIzq <- misionerosIzq + action[1]
+    ladoBarca <- "Izquierda"
   }
   
-  return(result)
+  return(c(canibalesIzq, misionerosIzq, ladoBarca))
+  
 }
 
 # Analyzes if a state is final or not
-is.final.state <- function (state, final_satate, problem) {
-  return(all(state == final_satate))
+is.final.state <- function (state, final_state, problem) {
+  canibalesIzq <- as.numeric(state[1])
+  misionerosIzq <- as.numeric(state[2])
+  ladoBarca <- state[3]
   
+  return(canibalesIzq == 0 && misionerosIzq == 0 && ladoBarca == "Derecha")
 }
 
+
 # Transforms a state into a string
-to.string = function (state, problem) {
-  return(paste("(", state[1], "C,", state[2], "M)-[", state[5], "]-(", state[3], "C,", state[4], "M)", sep=""))
+to.string = function (state, problem=NULL) {
+  canibalesIzq <- as.numeric(state[1])
+  misionerosIzq <- as.numeric(state[2])
+  ladoBarca <- state[3]
+  
+  canibalesDer <- problem$numCanibales - canibalesIzq
+  misionerosDer <- problem$numMisioneros - misionerosIzq
+
+  return(paste("(", canibalesIzq, "C,", misionerosIzq, "M)-[", ladoBarca, "]-(", canibalesDer, "C,", misionerosDer, "M)", sep=""))
 }
 
 # Returns the cost of applying an action over a state
@@ -158,4 +159,3 @@ get.evaluation <- function(state, problem) {
   
   return(1) # Default value is 1.
 }
-

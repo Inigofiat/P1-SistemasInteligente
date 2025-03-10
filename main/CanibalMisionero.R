@@ -28,28 +28,16 @@ source("../problem/MisioneroCanibalCod.R")
 
 # Function to solve the problem using different algorithms
 solve.problem <- function(problem) {
-  bfs_ts   <- breadth.first.search(problem, max_iterations = 2000, count_print = 1000)
   bfs_gs   <- breadth.first.search(problem, max_iterations = 2000, count_print = 1000, graph_search = TRUE)
-  dfs_ts   <- depth.first.search(problem, max_iterations = 2000, count_print = 1000)
   dfs_gs   <- depth.first.search(problem, max_iterations = 2000, count_print = 1000, graph_search = TRUE)
-  dls20_ts <- depth.limited.search(problem, max_iterations = 2000, depth_limit = 20, count_print = 1000)
   dls20_gs <- depth.limited.search(problem, max_iterations = 2000, depth_limit = 20, count_print = 1000, graph_search = TRUE)
-  ids_ts   <- iterative.deepening.search(problem, max_iterations = 2000, max_depth = 20, count_print = 1000)
   ids_gs   <- iterative.deepening.search(problem, max_iterations = 2000, max_depth = 20, count_print = 1000, graph_search = TRUE)
-  ucs_ts   <- uniform.cost.search(problem, max_iterations = 2000, count_print = 1000)
-  ucs_gs   <- uniform.cost.search(problem, max_iterations = 2000, count_print = 1000, graph_search = TRUE)
-  gbfs_ts  <- greedy.best.first.search(problem, max_iterations = 2000, count_print = 1000)
-  gbfs_gs  <- greedy.best.first.search(problem, max_iterations = 2000, count_print = 1000, graph_search = TRUE)
-  a_star_gs <- a.star.search(problem, max_iterations = 2000, count_print = 1000)
-  a_star_ts <- a.star.search(problem, max_iterations = 2000, count_print = 1000, graph_search = TRUE)
   
-  results <- analyze.results(list(bfs_ts, bfs_gs,
-                                  dfs_ts, dfs_gs,
-                                  dls20_ts, dls20_gs,
-                                  ids_ts, ids_gs,
-                                  ucs_ts, ucs_gs,
-                                  gbfs_ts, gbfs_gs,
-                                  a_star_gs, a_star_ts), problem)
+  results <- analyze.results(list(bfs_gs,
+                                  dfs_gs,
+                                  dls20_gs,
+                                  ids_gs
+                                  ), problem)
   
   # Print results in an HTML Table
   kable_material(kbl(results, caption = "MisionerosCanibal"),  c("striped", "hover", "condensed", "responsive"))
@@ -63,9 +51,9 @@ solve.problem(problem)
 # 12 steps needed to be solved
 problem <- initialize.problem(5,5,3)
 # Solve the problem
+
 solve.problem(problem)
 
 problem <- initialize.problem(10,10,4)
 # Solve the problem
 solve.problem(problem)
-
