@@ -147,9 +147,20 @@ to.string = function (state, problem=NULL) {
 
 # Returns the cost of applying an action over a state
 get.cost <- function (action, state, problem) {
-  # <INSERT YOUR CODE HERE TO RETURN THE COST OF APPLYING THE ACTION ON THE STATE>
   
-  return(1) # Default value is 1.
+  canibalesIzq <- as.numeric(state[1])
+  misionerosIzq <- as.numeric(state[2])
+  
+  #misionerosMovimiento <- action[1]
+  #canibalesMovimiento <- action[2]
+  
+  
+  #??????????
+  coste <- 15 + (1 + (action[1] * 0.10) + (action[2]*0.05))
+  coste <- 15 + (action[1] + action[2])
+  
+  
+  return(coste) # Default value is 1.
 }
 
 # Heuristic function used by Informed Search Algorithms
