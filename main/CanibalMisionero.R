@@ -25,7 +25,7 @@ source("../algorithms/results-analysis/analyze-results.R")
 # 8-Puzzle Problem
 
 source("../problem/MisioneroCanibalCod.R")
-
+  
 # Function to solve the problem using different algorithms
 solve.problem <- function(problem) {
   bfs_gs   <- breadth.first.search(problem, max_iterations = 2000, count_print = 1000, graph_search = TRUE)

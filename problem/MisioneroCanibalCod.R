@@ -148,25 +148,30 @@ to.string = function (state, problem=NULL) {
 # Returns the cost of applying an action over a state
 get.cost <- function (action, state, problem) {
   
-  canibalesIzq <- as.numeric(state[1])
-  misionerosIzq <- as.numeric(state[2])
-  
   #misionerosMovimiento <- action[1]
   #canibalesMovimiento <- action[2]
   
+  tiempoBase <- 15
   
-  #??????????
-  coste <- 15 + (1 + (action[1] * 0.10) + (action[2]*0.05))
-  coste <- 15 + (action[1] + action[2])
+  retrasoMisioneros <- action[1] * (0.10 * tiempoBase)
+  retrasoCanibales <- action[2] * (0.05 * tiempoBase)
   
+  tiempoSubirBajar <- action[1] + action[2]
   
-  return(coste) # Default value is 1.
+  coste <- tiempoBase + retrasoMisioneros + retrasoCanibales + tiempoSubirBajar
+  
+  return(coste)
 }
 
 # Heuristic function used by Informed Search Algorithms
-#FUNCIÓN HEURÍSTICA: suma de las distancias de cada una de las casillas (excluyendo la que se encuentra vacía)
 get.evaluation <- function(state, problem) {
-  # <INSERT YOUR CODE HERE TO RETURN THE RESULT OF THE EVALUATION FUNCTION>
   
-  return(1) # Default value is 1.
+  canibalesIzq <- as.numeric(state[1])
+  misionerosIzq <- as.numeric(state[2])
+  
+  personasRestantes <- canibalesIzq + misionerosIzq
+  
+  h <- ceiling(personasRestantes / (problem$capacidadBarca - 1))
+  
+  return(h)
 }
