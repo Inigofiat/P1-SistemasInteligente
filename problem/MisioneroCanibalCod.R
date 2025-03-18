@@ -6,11 +6,10 @@
 
 # This function must return a list with the information needed to solve the problem.
 # (Depending on the problem, it should receive or not parameters)
+
 initialize.problem <- function(numCanibales, numMisioneros, capacidadBarca) {
-  # Initialize the problem object as an empty list.
   problem <- list()
   
-  # This attributes are compulsory
   problem$name <- paste0("MisionerosYCanibales")
   
   problem$state_initial <- c(numCanibales, numMisioneros, "Izquierda", capacidadBarca)
@@ -20,7 +19,6 @@ initialize.problem <- function(numCanibales, numMisioneros, capacidadBarca) {
   problem$numMisioneros <- numMisioneros
   problem$capacidadBarca <- capacidadBarca
   
-  # Initialize the possible actions
   acciones <- list()
   for (m in 0:min(numMisioneros, capacidadBarca)) {
     for (c in 0:min(numCanibales, capacidadBarca - m)) {
@@ -30,11 +28,8 @@ initialize.problem <- function(numCanibales, numMisioneros, capacidadBarca) {
       }
     }
   }
-  
-  
   problem$actions_possible <- do.call(rbind, acciones)
   
-  # Return the problem list with all attributes
   return(problem)
 }
 
@@ -58,8 +53,9 @@ is.applicable <- function (state, action, problem) {
   canibalesDer <-  problem$numCanibales - canibalesIzq
   misionerosDer <-  problem$numMisioneros - misionerosIzq
   
-  if (is.na(action[1]) || is.na(action[2]) || is.na(action[3])) {
+  if (is.null(action[1]) || is.null(action[2]) || is.null(action[3])) {
     return(FALSE)
+    
   }
   
   if(ladoBarca=="Izquierda" && action[3] == -1){
@@ -97,14 +93,13 @@ is.applicable <- function (state, action, problem) {
   return(result)
 }
 
-# Returns the state resulting on applying the action over the state
 effect <- function (state, action, problem) {
   result <- state # Default value is the current state.
   
   canibalesIzq <- as.numeric(state[1])
   misionerosIzq <- as.numeric(state[2])
   ladoBarca <- state[3]
-  capacidadBarca <- problem$capacidadBarca    
+  capacidadBarca <- as.numeric(state[4])    
   
   #misionerosMovimiento <- action[1]
   #canibalesMovimiento <- action[2]
@@ -119,7 +114,7 @@ effect <- function (state, action, problem) {
     ladoBarca <- "Izquierda"
   }
   
-  return(c(canibalesIzq, misionerosIzq, ladoBarca))
+  return(c(canibalesIzq, misionerosIzq, ladoBarca, capacidadBarca))
   
 }
 
@@ -155,23 +150,36 @@ get.cost <- function (action, state, problem) {
   
   retrasoMisioneros <- action[1] * (0.10 * tiempoBase)
   retrasoCanibales <- action[2] * (0.05 * tiempoBase)
+
   
   tiempoSubirBajar <- action[1] + action[2]
+
   
   coste <- tiempoBase + retrasoMisioneros + retrasoCanibales + tiempoSubirBajar
   
   return(coste)
+  
+  #return(1)
 }
 
-# Heuristic function used by Informed Search Algorithms
 get.evaluation <- function(state, problem) {
-  
   canibalesIzq <- as.numeric(state[1])
   misionerosIzq <- as.numeric(state[2])
+  ladoBarca <- state[3]
+  capacidadBarca <- problem$capacidadBarca
+
+  totalIzq <- canibalesIzq + misionerosIzq
+
+
+  if(totalIzq == 0) {
+    return(0)
+  }
+
+  if(ladoBarca == "Izquierda") {
+    return(ceiling(totalIzq / (capacidadBarca - 1) * 2) - 1)
+  } else {
+    return(ceiling(totalIzq / (capacidadBarca - 1) * 2))
+  }
   
-  personasRestantes <- canibalesIzq + misionerosIzq
-  
-  h <- ceiling(personasRestantes / (problem$capacidadBarca - 1))
-  
-  return(h)
 }
+

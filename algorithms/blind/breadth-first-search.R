@@ -141,6 +141,7 @@ breadth.first.search <- function(problem,
     print("Executed Actions: ", quote = FALSE)
     print(node_first$actions, quote = FALSE)
     result$state_final = node_first
+
   } else {
     if (end_reason == "Frontier") {
       print("Frontier is empty. No Solution found", quote = FALSE)
